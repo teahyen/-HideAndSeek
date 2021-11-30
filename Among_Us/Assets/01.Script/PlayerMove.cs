@@ -7,6 +7,7 @@ public class PlayerMove : MonoBehaviour
     public Animator move;
 
     public float speed;
+    public bool isLift = true;
     void Start()
     {
         
@@ -14,11 +15,16 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetAxisRaw("Horizontal")> 0){
+        if(Input.GetAxisRaw("Horizontal")> 0||Input.GetAxisRaw("Vertical") != 0&&isLift){
             move.Play("Right");
-        }
-        if(Input.GetAxisRaw("Horizontal")< 0){
+            isLift = false;
+        }else if(Input.GetAxisRaw("Horizontal")< 0||Input.GetAxisRaw("Vertical") != 0&&!isLift){
             move.Play("Lift");
+            isLift = true;
+        }else if(isLift){
+            move.Play("Idle_r");
+        }else{
+            move.Play("Idle");
         }
         transform.position += new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0).normalized * Time.deltaTime*speed;
 
