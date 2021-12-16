@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,27 +15,46 @@ public class ObjInteraction : MonoBehaviour
     public GameObject onBtnObj;
     public LayerMask player;
 
+    public GameObject raisepanel;
+
+    private Button useBtn;
+
     //플래이어가 가까울때
     public bool newrPlayer;
 
 
-    public int nearRange = 2;
+    public float nearRange = 2;
 
-
+    ColorBlock colorBlock;
     //front
     public bool frontPlayer;
 
     public float frontRange = 1.5f;
 
     private void Start() {
+        useBtn = GameObject.Find("CitizenUse").GetComponent<Button>();
         onBtnObj.gameObject.SetActive(false);
+        raisepanel.transform.localPosition += new Vector3(0, -900, 0);
         outLine.enabled = false;
+
+        //버튼 색깔 변경
+        useBtn.enabled = true;
+        colorBlock = useBtn.colors;
+        colorBlock.normalColor = new Color(1f, 1f, 1f, 0.5f);
+        useBtn.colors = colorBlock;
+        useBtn.onClick.AddListener(() =>
+        {
+            Front(HandleOpen);
+        });
     }
     private void Update()
     {
         Near();
         Front();
-
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Front(HandleOpen);
+        }
     }
 
     private void Near()
@@ -50,17 +70,32 @@ public class ObjInteraction : MonoBehaviour
         }
     }
 
-    private void Front()
+    private void Front(Action Handle = null)
     {
         frontPlayer = Physics2D.OverlapCircle(transform.position, frontRange, player);
         if (frontPlayer)
         {
+
+            colorBlock.normalColor = new Color(1f, 1f, 1f, 1f);
+            useBtn.colors = colorBlock;
+            useBtn.enabled = true;
+            if (Handle != null)
+            {
+                Handle();
+            }
+
             onBtnObj.SetActive(true);
         }
         else
         {
+            colorBlock.normalColor = new Color(1f, 1f, 1f, 0.5f);
             onBtnObj.SetActive(false);
         }
+
+    }
+    private void HandleOpen()
+    {
+        onBtnObj.GetComponent<InputManager>().OpenPanel();
     }
 
     private void OnDrawGizmosSelected()

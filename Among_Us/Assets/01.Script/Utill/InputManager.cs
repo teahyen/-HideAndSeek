@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 public enum OnPenalMode
 {
     //아래에서 위
@@ -16,9 +17,29 @@ public class InputManager : MonoBehaviour
 
     public OnPenalMode onPenalMode;
 
-    private void Start()
+    public bool isEmergency = false;
+
+    PlayerMove playerMove;
+
+    void Start()
     {
-        raisepanel.SetActive(false);
+        //플래이어를 멈춤
+        playerMove = GameObject.Find("Player").GetComponent<PlayerMove>();
+        switch (onPenalMode)
+        {
+            case OnPenalMode.defualt:
+                print("내려가");
+                raisepanel.transform.localPosition += new Vector3(0,-900,0);
+                break;
+
+
+            case OnPenalMode.Lazer:
+                break;
+
+            case OnPenalMode.CCTV:
+                break;
+        }
+
     }
 
     void Update()
@@ -31,22 +52,40 @@ public class InputManager : MonoBehaviour
             {
                 if (rayHit.transform.gameObject.CompareTag("Button"))
                 {
-                    print("버튼이 눌령숑");
-
-                    switch (onPenalMode)
-                    {
-                        case OnPenalMode.defualt:
-                            break;
-
-
-                        case OnPenalMode.Lazer:
-                            break;
-
-                        case OnPenalMode.CCTV:
-                            break;
-                    }
+                    OpenPanel();
                 }
             }
         }
+
+
+    }
+
+    public void OpenPanel()
+    {
+        print("버튼이 눌령숑");
+        playerMove = GameObject.Find("Player").GetComponent<PlayerMove>();
+        playerMove.enabled = false;
+        switch (onPenalMode)
+        {
+            case OnPenalMode.defualt:
+                raisepanel.transform.DOLocalMoveY(0, 0.3f);
+                if (isEmergency)
+                {
+                    raisepanel.GetComponent<EmergencyScript>().startCount = true;
+                }
+                break;
+
+
+            case OnPenalMode.Lazer:
+                break;
+
+            case OnPenalMode.CCTV:
+                break;
+        }
+    }
+
+    public void OnPanel()
+    {
+        playerMove.enabled = false;
     }
 }

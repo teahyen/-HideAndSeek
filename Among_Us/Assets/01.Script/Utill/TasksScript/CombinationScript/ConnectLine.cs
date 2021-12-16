@@ -1,0 +1,17 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ConnectLine : MonoBehaviour
+{
+    //ÁØ¿½ÀÌÇÑÅ× ÄÚµå »æ ¶âÀ» ¿¹Á¤
+    void Start()
+    {
+        
+    }
+
+    void Update()
+    {
+        
+    }
+}

@@ -42,5 +42,9 @@ public class PlayerMove : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.F)){
             //나중에 상호작용 할꺼임
         }
+
+
     }
+
+
 }
