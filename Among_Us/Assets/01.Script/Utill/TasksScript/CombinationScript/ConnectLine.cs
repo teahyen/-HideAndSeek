@@ -28,37 +28,40 @@ public class ConnectLine : MonoBehaviour
         print(p.name);
         if (p.name.Contains("End"))
             Destroy(this);
-        startPos.onClick.AddListener(() =>
-        {
-            print("실행됨");
-            lineImg.gameObject.SetActive(true);
-            mousePos = Input.mousePosition;
-            lineImg.transform.position = startPos.transform.position;
-            headLine.transform.position = startPos.transform.position;
-        });
-    }
-
-    void Update()
-    {
-        //if (Input.GetMouseButtonDown(0))
+        //startPos.onClick.AddListener(() =>
         //{
+        //    print("실행됨");
         //    lineImg.gameObject.SetActive(true);
         //    mousePos = Input.mousePosition;
         //    lineImg.transform.position = startPos.transform.position;
         //    headLine.transform.position = startPos.transform.position;
-        //}
+        //});
+    }
+
+    void Update()
+    {
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            print("가능?");
+            lineImg.gameObject.SetActive(true);
+            mousePos = Input.mousePosition;
+            lineImg.transform.position = startPos.transform.position;
+            headLine.transform.position = startPos.transform.position;
+        }
 
         //이때 머리 부분도 같이 움직이게 해야한다.
         if (Input.GetMouseButton(0))
         {
             Vector3 myPos = Input.mousePosition;
-            lineImg.transform.localScale = new Vector2(Vector3.Distance(myPos, mousePos)/30, 1);
-            //여기 아래 부분이랑 똑같이 하면 될거 같은데
+            lineImg.transform.localScale = new Vector2(Vector3.Distance(myPos, mousePos)/29, 1);
             lineImg.transform.localRotation = Quaternion.Euler(0, 0,
                 AngleInDeg(mousePos, myPos));
 
 
-            headLine.transform.localPosition = myPos;
+
+
+            headLine.transform.position = Input.mousePosition;
             headLine.transform.localRotation = Quaternion.Euler(0, 0,
                 AngleInDeg(mousePos, myPos));
 
@@ -69,6 +72,7 @@ public class ConnectLine : MonoBehaviour
         
         if (Input.GetMouseButtonUp(0)/*&&!isEnd*/)
         {
+            headLine.transform.rotation = Quaternion.Euler(0,0,0);
             //만약 연결이 됬으면 이 함수를 실행 시키면 안된다.
             lineImg.gameObject.SetActive(false);
             headLine.transform.position = startPos.transform.position;
